@@ -1,0 +1,351 @@
+NetSh Advfirewall set allprofiles state off
+D:
+cd D:\hbase\hbase-1.2.0\bin
+start-hbase.cmd
+
+#1.创建表明
+public class createTab {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+        connection = HbaseConnectionUtil.getHBaseConnection();
+        admin = (HBaseAdmin) connection.getAdmin();
+        HTableDescriptor tableDescriptor = new HTableDescriptor(TableName.valueOf("sundakang"));
+        HColumnDescriptor cf1 = new  HColumnDescriptor("f1");
+    }catch (Exception e){
+        throw new RuntimeException(e);
+    }finally{
+        try{
+            admin.close();
+            connection.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+  }
+}
+#2.添加列族，修改列族
+#王星洋
+public class AddColumn {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("wxy");
+            admin.addColumnFamily(TableName.valueOf("jiucai"), columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public class ModifyFamilyName {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("wxy");
+            columnDescriptor.setMaxVersions(02);
+            admin.modifyColumnFamily(TableName.valueOf("jiucai"),columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#乔一梁
+public class AddColumn {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("qyl");
+            admin.addColumnFamily(TableName.valueOf("jiucai"), columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public class ModifyFamilyName {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("qyl");
+            columnDescriptor.setMaxVersions(01);
+            admin.modifyColumnFamily(TableName.valueOf("jiucai"),columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#林君宜
+public class AddColumn {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("ljy");
+            admin.addColumnFamily(TableName.valueOf("jiucai"), columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public class ModifyFamilyName {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("ljy");
+            columnDescriptor.setMaxVersions(03);
+            admin.modifyColumnFamily(TableName.valueOf("jiucai"),columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#丁锦涛
+public class AddColumn {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("djt");
+            admin.addColumnFamily(TableName.valueOf("jiucai"), columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public class ModifyFamilyName {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("djt");
+            columnDescriptor.setMaxVersions(04);
+            admin.modifyColumnFamily(TableName.valueOf("jiucai"),columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#王宇
+public class AddColumn {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("wy");
+            admin.addColumnFamily(TableName.valueOf("jiucai"), columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public class ModifyFamilyName {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("wy");
+            columnDescriptor.setMaxVersions(05);
+            admin.modifyColumnFamily(TableName.valueOf("jiucai"),columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#李采辰
+public class AddColumn {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("llc");
+            admin.addColumnFamily(TableName.valueOf("jiucai"), columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public class ModifyFamilyName {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            HColumnDescriptor columnDescriptor = new HColumnDescriptor("llc");
+            columnDescriptor.setMaxVersions(06);
+            admin.modifyColumnFamily(TableName.valueOf("jiucai"),columnDescriptor);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#3.列出所有表
+public class ListTables {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            TableName[] tableNames = admin.listTableNames();
+            for(TableName tableName:tableNames){
+                System.out.println(tableName.getNameAsString());
+           }
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+#4.删除所有表
+public class DeleteTables {
+    public static void main(String[] args) {
+        HBaseAdmin admin = null;
+        Connection connection =null;
+        try{
+            connection = HbaseConnectionUtil.getHBaseConnection();
+            admin = (HBaseAdmin) connection.getAdmin();
+            boolean enabled = admin.isTableEnabled(TableName.valueOf("jiucai"));
+            if (enabled){
+                admin.disableTable(TableName.valueOf("jiucai"));
+            }
+            System.out.println(admin.isTableDisabled(TableName.valueOf("jiucai")));
+            admin.deleteTable(TableName.valueOf("jiucai"));
+            boolean tableExists = admin.tableExists(TableName.valueOf("jiucai"));
+            System.out.println(tableExists);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                admin.close();
+                connection.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+}

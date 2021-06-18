@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.MarketRecordMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.MarketRecord">
+      <result column="C_KEY" property="mrKey" />
+      <result column="C_CM_ID" property="cmId"/>
+      <result column="C_NAME" property="cName"/>
+      <result column="C_MANAGEMENT" property="mrManagrment"/>
+      <result column="C_DEMAND" property="mrDemend"/>
+      <result column="C_REPORT" property="mrReport"/>
+      <result column="C_TESTIMONLALS" property="mrTes"/>
+      <result column="C_EVALUATION" property="mrEvalue"/>
+      <result column="C_DATE" property="mrDate"/>
+      <result column="C_ID" property="cId"/>
+   </resultMap>
+
+<!-- 查询营销记录 -->
+<select id="getMarketRecordList" parameterType="Map" resultMap="BaseResultMap">
+  select * from GZCRM_CMARKETING_RECORD where 1=1
+  <if test="cmId!=null and cmId!=''">
+  and C_CM_ID=#{cmId}
+  </if>
+  <if test="mrKey!=null and mrKey!=''">
+  and C_KEY=#{mrKey}
+  </if>
+  <if test="cName!=null and cName!=''">
+  and C_NAME like '%'||#{cName}||'%' 
+  </if>
+</select>
+
+
+
+<!-- 增加营销记录 -->
+<insert id="addMarketRecord" parameterType="MarketRecord">
+  insert into GZCRM_CMARKETING_RECORD (C_KEY,C_CM_ID,C_NAME,C_MANAGEMENT,C_DEMAND,C_REPORT,C_TESTIMONLALS,C_EVALUATION,C_DATE,C_ID) 
+values (#{cId},#{cmId},#{cName},#{mrManagrment},#{mrDemend},#{mrReport},#{mrTes},#{mrEvalue},#{mrDate},#{cId})
+</insert>
+
+<!-- 修改营销记录 -->
+<update id="updateMarketRecord" parameterType="MarketRecord">
+   update GZCRM_CMARKETING_RECORD set  C_NAME=#{cName},C_MANAGEMENT=#{mrManagrment},C_DEMAND=#{mrDemend},C_REPORT=#{mrReport},
+ C_TESTIMONLALS=#{mrTes},C_EVALUATION=#{mrEvalue},C_DATE=#{mrDate} where C_KEY=#{mrKey}  
+</update>
+
+<!-- 批量删除营销记录 -->
+<delete id="deleteMarketRecord" parameterType="int[]">
+  delete from GZCRM_CMARKETING_RECORD where C_KEY in 
+   <foreach collection="array" item="mrKey" open="(" close=")" separator="," index="no">
+     #{mrKey}
+   </foreach>
+</delete>
+
+
+</mapper>

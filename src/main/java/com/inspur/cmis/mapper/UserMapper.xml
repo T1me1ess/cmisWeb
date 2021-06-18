@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.UserMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.User">
+      <result column="MEM_ID" property="userId" />
+      <result column="CNAME" property="username"/>
+      <result column="MEM_PASS" property="password"/>
+      <result column="MEM_SEX" property="sex"/>
+      <result column="MEM_BORN" property="birthDay"/>
+      <result column="MEM_MAIL" property="email"/>
+      <result column="MEM_QUESTION" property="question"/>
+      <result column="MEM_ANSWER" property="answer"/>
+      <result column="REGISTER_TIME" property="registerTime"/>
+      <result column="LAST_TIME" property="lastTime"/>
+      <result column="ISENABLE" property="isEnable"/>
+      <result column="ROLEID" property="roleId"/>
+   </resultMap>
+   
+<!-- 登录实现查询 -->
+<select id="getUser" parameterType="user" resultMap="BaseResultMap">
+  select * from yc_member where CNAME=#{username} and MEM_PASS=#{password}
+</select>
+
+<!-- 实现用户登录后修改最后登录的时间 -->
+<update id="updateLastTime" parameterType="User">
+  update yc_member set LAST_TIME=#{lastTime} where MEM_ID=#{userId}
+</update>
+
+
+<!-- 用户的默认查询 -->
+<select id="getUserList" parameterType="Map" resultMap="BaseResultMap">
+  select * from yc_member where 1=1
+  <if test="userId!=null and userId!=''">
+  and MEM_ID=#{userId}
+  </if>
+  <if test="username!=null and username!=''">
+  and CNAME like '%'||#{username}||'%' 
+  </if>
+</select>
+
+
+<!-- 增加的用户 -->
+  
+<insert id="addUser" parameterType="User">
+  insert into yc_member (MEM_ID,CNAME,MEM_PASS,MEM_SEX,MEM_BORN,MEM_MAIL,MEM_QUESTION,MEM_ANSWER,REGISTER_TIME,LAST_TIME,ISENABLE,ROLEID) 
+values (seq_id.nextval,#{username},#{password},#{sex},#{birthDay},#{email},#{question},#{answer},#{registerTime},#{lastTime},#{isEnable},#{roleId})
+
+</insert>
+
+
+
+<!-- 根据Id批量删除用用户-->
+<delete id="deleteUsers" parameterType="int[]">
+  delete from yc_member where MEM_ID in 
+   <foreach collection="array" item="ids" open="(" close=")" separator="," index="no">
+     #{ids}
+   </foreach>
+</delete>
+
+
+<!-- 根据Id批量操作用户-->
+<update id="operateUsers" parameterType="Map">
+  update yc_member set 
+  <if test='tag == "1"'>
+  ISENABLE='T' </if> 
+  <if test='tag == "2"'>
+  ISENABLE='F'
+  </if>
+  <if test='tag == "3"'>
+  MEM_PASS='123456'
+  </if>
+  where MEM_ID in
+   <foreach collection="userIds" item="ids" open="(" close=")" separator="," index="no">
+     #{ids}
+   </foreach>
+</update>
+
+<!-- 校对用户名是否已经从存在 -->
+<select id="getUserByUserName" parameterType="String" resultMap="BaseResultMap">
+  select * from yc_member where CNAME=#{username}
+</select>
+
+<!-- 修改选择用户的信息 -->
+<update id="updateUsers" parameterType="User">
+   update yc_member set  CNAME=#{username},MEM_SEX=#{sex},MEM_BORN=#{birthDay},ROLEID=#{roleId} where MEM_ID=#{userId}  
+</update>
+
+
+<!-- 客户经理用户批量保存的同时批量保存用户信息-->
+  <insert id="importUser" parameterType="java.util.List">
+    insert into yc_member (MEM_ID,CNAME,MEM_PASS,MEM_SEX,MEM_QUESTION,MEM_ANSWER,REGISTER_TIME,LAST_TIME,ISENABLE,ROLEID)
+    <foreach collection="list" item="user"  separator="union all">
+      (select #{user.userId},#{user.username},#{user.password},#{user.sex},#{user.question},#{user.answer}, #{user.registerTime},
+      #{user.lastTime},#{user.isEnable},#{user.roleId} from dual)
+    </foreach>
+  </insert>
+
+   <!--按照性别进行统计查询 -->
+  <select id="userStat" resultType="userExt">
+     select mem_sex type,count(*) count from yc_member group by mem_sex
+  </select>
+
+</mapper>

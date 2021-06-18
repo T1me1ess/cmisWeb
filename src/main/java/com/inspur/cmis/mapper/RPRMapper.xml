@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.RPRMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.RPR">
+      <result column="CM_KEY" property="rprKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_TPYE" property="rprType"/>
+      <result column="CM_SUB" property="rprSub"/>
+      <result column="CM_DATE" property="rprDate"/>
+      <result column="CM_AUNIT" property="rprUnit"/>
+      <result column="CM_APERSON" property="rprAperson"/>
+      <result column="CM_RDATE" property="rprRdate"/>
+      <result column="CM_AREASON" property="rprAreson"/>
+      <result column="CM_REMARK " property="rprRemark"/>
+      <result column="CM_ATTACHMENT" property="rprAttachment"/>
+      <result column="CM_MODIFICATION_DATE" property="rprModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="rprModiPerson"/>
+   </resultMap>
+   
+<!-- 查询奖惩信息 -->
+<select id="getRPRList" parameterType="Map" resultType="RPRExt">
+ select CM_KEY rprKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, CM_TPYE rprType,
+   CM_SUB  rprSub,CM_DATE rprDate,CM_AUNIT rprUnit,CM_APERSON rprAperson,CM_RDATE rprRdate,
+   CM_AREASON rprAreson,CM_REMARK rprRemark,CM_ATTACHMENT rprAttachment,CM_MODIFICATION_DATE rprModiDate,
+   CM_MODIFICATION_PERSON rprModiPerson
+   from gzcrm_cmrpr   where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID=#{cmId}
+  </if>
+  <if test="rprType!=null and rprType!=''">
+  and CM_TPYE=#{rprType}
+  </if>
+  <if test="rprKey!=null and rprKey!=''">
+  and CM_KEY=#{rprKey}
+  </if>
+</select>
+
+<!-- 增加奖惩信息 -->
+<insert id="addRPR" parameterType="RPR">
+  insert into gzcrm_cmrpr (CM_KEY,CM_ID,CM_TPYE,CM_SUB,CM_DATE,CM_AUNIT,CM_APERSON,CM_RDATE,
+  CM_AREASON,CM_REMARK,CM_ATTACHMENT,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values (seq_id.nextval,#{cmId},#{rprType},#{rprSub},#{rprDate},#{rprUnit},#{rprAperson},#{rprRdate},
+#{rprAreson},#{rprRemark},#{rprAttachment},#{rprModiDate},#{rprModiPerson})
+</insert>
+
+<!-- 修改奖惩信息 -->
+<update id="modifyRPR" parameterType="RPR">
+   update gzcrm_cmrpr set CM_TPYE=#{rprType},CM_SUB=#{rprSub},CM_DATE=#{rprDate},
+   CM_AUNIT=#{rprUnit},CM_APERSON=#{rprAperson},CM_RDATE=#{rprRdate},CM_AREASON=#{rprAreson},
+   CM_REMARK=#{rprRemark},CM_ATTACHMENT=#{rprAttachment},CM_MODIFICATION_DATE=#{rprModiDate},
+   CM_MODIFICATION_PERSON=#{rprModiPerson} where CM_KEY=#{rprKey}  
+</update>
+
+<!-- 删除奖惩信息 -->	
+<delete id="deleteRPR" parameterType="int[]">
+  delete from gzcrm_cmrpr where CM_KEY in 
+   <foreach collection="array" item="rprKey" open="(" close=")" separator="," index="no">
+     #{rprKey}
+   </foreach>
+</delete>
+
+</mapper>

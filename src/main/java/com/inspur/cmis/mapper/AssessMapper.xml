@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.AssessMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.Assess">
+      <result column="CM_KEY" property="assKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_ASSTIME" property="assTime"/>
+      <result column="CM_ASSUB" property="assSub"/>
+      <result column="CM_ASSPERIOD" property="assPeriod"/>
+      <result column="CM_ASSRESULT" property="assResult"/>
+      <result column="CM_APPRAISAL" property="assAppraisal"/>
+      <result column="CM_ASSUNIT" property="assUnit"/>
+      <result column="CM_REMARK" property="assRemark"/>
+      <result column="CM_ATTACHMENT " property="assAttachment"/>
+      <result column="CM_MODIFICATION_DATE" property="assModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="assModiPerson"/>
+   </resultMap>
+   
+
+<!-- 查询考核信息 -->
+<select id="getASSList" parameterType="Map" resultType="AssessExt">
+ select CM_KEY assKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, CM_ASSTIME assTime,
+   CM_ASSUB  assSub,CM_ASSPERIOD assPeriod,CM_ASSRESULT assResult,CM_APPRAISAL assAppraisal,CM_ASSUNIT assUnit,
+   CM_REMARK assRemark,CM_ATTACHMENT assAttachment,CM_MODIFICATION_DATE assModiDate,CM_MODIFICATION_PERSON assModiPerson
+   from gzcrm_cmass a  where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID like '%'||#{cmId}||'%' 
+  </if>
+  <if test="assTime!=null and assTime!=''">
+  and CM_ASSTIME=#{assTime}
+  </if>
+  <if test="assKey!=null and assKey!=''">
+  and CM_KEY=#{assKey}
+  </if>
+</select>
+
+<!-- 添加考核信息 -->
+<insert id="addAssess" parameterType="Assess">
+  insert into gzcrm_cmass (CM_KEY,CM_ID,CM_ASSTIME,CM_ASSUB,CM_ASSPERIOD,CM_ASSRESULT,
+  CM_APPRAISAL,CM_ASSUNIT,CM_REMARK,CM_ATTACHMENT,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values (seq_id.nextval,#{cmId},#{assTime},#{assSub},#{assPeriod},#{assResult},#{assAppraisal},#{assUnit},#{assRemark},#{assAttachment},
+#{assModiDate},#{assModiPerson})
+</insert>
+
+<!-- 修改考核信息 -->
+<update id="modifyAssess" parameterType="Assess">
+   update gzcrm_cmass set CM_ASSTIME=#{assTime},CM_ASSUB=#{assSub},CM_ASSPERIOD=#{assPeriod},
+   CM_ASSRESULT=#{assResult},CM_APPRAISAL=#{assAppraisal},CM_ASSUNIT=#{assUnit},CM_REMARK=#{assRemark},
+   CM_ATTACHMENT=#{assAttachment},CM_MODIFICATION_DATE=#{assModiDate},CM_MODIFICATION_PERSON=#{assModiPerson} where CM_KEY=#{assKey}  
+</update>
+
+<!-- 删除考核信息 -->
+<delete id="deleteAssess" parameterType="int[]">
+  delete from gzcrm_cmass where CM_KEY in 
+   <foreach collection="array" item="asskey" open="(" close=")" separator="," index="no">
+     #{asskey}
+   </foreach>
+</delete>
+
+
+</mapper>

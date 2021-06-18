@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.StudyMgrMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.StudyManager">
+      <result column="L_KEY" property="lKey" />
+      <result column="L_NAME" property="lName"/>
+      <result column="L_TYPE" property="lType"/>
+      <result column="L_DES" property="lDes"/>
+      <result column="L_URL" property="lUrl"/>
+      <result column="L_LINE" property="lLine"/>
+      <result column="L_UPER" property="lUper"/>
+      <result column="L_UNIT" property="lUnit"/>
+      <result column="L_DATE" property="lDate"/>
+   </resultMap>
+
+<!-- 查询学习资料 -->  
+<select id="getStudyMgrList" parameterType="Map" resultMap="BaseResultMap">
+  select * from GZCRM_LEARN where 1=1
+  <if test="lName!=null and lName!=''">
+  and L_NAME like '%'||#{lName}||'%' 
+  </if>
+  <if test="lType!=null and lType!=''">
+  and L_TYPE=#{lType}
+  </if>
+</select>
+
+<!-- 增加学习资料 -->
+<insert id="addStudyMgr" parameterType="StudyManager">
+  insert into GZCRM_LEARN (L_NAME,L_TYPE,L_DES,L_URL,L_LINE,L_UNIT,L_DATE,L_UPER,L_key) 
+values (#{lName},#{lType},#{lDes},#{lUrl},#{lLine},#{lUnit},#{lDate},#{lUper},seq_id.nextval )
+</insert>
+
+<!-- 修改学习资料 -->
+<update id="updateStudyMgr" parameterType="StudyManager">
+   update GZCRM_LEARN set  L_NAME=#{lName},L_TYPE=#{lType},L_DES=#{lDes},L_URL=#{lUrl},
+    L_LINE=#{lLine} where L_KEY=#{lKey}  
+</update>
+
+<!-- 删除学习资料 -->
+<delete id="deleteStudyMgr" parameterType="int[]">
+  delete from GZCRM_LEARN where L_KEY in 
+   <foreach collection="array" item="lkeys" open="(" close=")" separator="," index="no">
+     #{lkeys}
+   </foreach>
+</delete>
+
+
+
+</mapper>

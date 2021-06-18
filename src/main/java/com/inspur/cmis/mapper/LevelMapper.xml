@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.LevelMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.Level">
+      <result column="CM_KEY" property="leKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_HOLD_DATE" property="leDate"/>
+      <result column="CM_HOLD_LEVEL" property="leLevel"/>
+      <result column="CM_HOLD_TPYE" property="leType"/>
+      <result column="CM_ATTACHMENT" property="leAttachment"/>
+      <result column="CM_MODIFICATION_DATE" property="leModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="leModiPerson"/>
+      
+   </resultMap>
+  <!-- 等级认定情况 -->
+<!-- 查询等级认定情况 -->
+<select id="getLevelList" parameterType="Map" resultType="LevelExt">
+ select CM_KEY leKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, 
+ CM_HOLD_DATE leDate,CM_HOLD_LEVEL leLevel,CM_HOLD_TPYE leType,
+ CM_ATTACHMENT leAttachment,CM_MODIFICATION_DATE leModiDate,CM_MODIFICATION_PERSON leModiPerson
+ from gzcrm_cmlevel a where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID like '%'||#{cmId}||'%' 
+  </if>
+  <if test="leDate!=null and leDate!=''">
+  and CM_HOLD_DATE  like  '%'||#{leDate}||'%' 
+  </if>
+   <if test="leLevel!=null and leLevel!=''">
+  and CM_HOLD_LEVEL like  '%'||#{leLevel}||'%'
+  </if>
+</select>
+
+
+<!-- 增加等级认定情况 -->
+<insert id="addLevel" parameterType="Level">
+  insert into gzcrm_cmlevel (CM_KEY,CM_ID,CM_HOLD_DATE,CM_HOLD_LEVEL,CM_HOLD_TPYE,CM_ATTACHMENT,
+  CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values (seq_id.nextval,#{cmId},#{leDate},#{leLevel},#{leType},#{leAttachment},#{leModiDate},#{leModiPerson})
+</insert>
+
+
+<!-- 修改等级认定情况 -->
+<update id="modifyLevel" parameterType="Level">
+   update gzcrm_cmlevel set CM_HOLD_DATE=#{leDate},CM_HOLD_LEVEL=#{leLevel},CM_HOLD_TPYE=#{leType},
+   CM_ATTACHMENT=#{leAttachment},CM_MODIFICATION_DATE=#{leModiDate},CM_MODIFICATION_PERSON=#{leModiPerson}
+    where CM_KEY=#{leKey}  
+</update>
+
+<!-- 删除等级认定 -->
+<delete id="deleteLevel" parameterType="int[]">
+  delete from gzcrm_cmlevel where CM_KEY in 
+   <foreach collection="array" item="leKey" open="(" close=")" separator="," index="no">
+     #{leKey}
+   </foreach>
+</delete>
+
+</mapper>

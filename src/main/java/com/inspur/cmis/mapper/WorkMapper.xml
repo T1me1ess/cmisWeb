@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.WorkMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.Work">
+      <result column="CM_KEY" property="workKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_OFFICE_DATE" property="workDate"/>
+      <result column="CM_POSITION" property="workPosition"/>
+      <result column="CM_UNIT" property="workUnit"/>
+      <result column="CM_ATTACHMENT" property="workAttachment"/>
+      <result column="CM_WORK" property="workWork"/>
+      <result column="CM_MODIFICATION_DATE" property="workModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="workModiPerson"/>
+      
+   </resultMap>
+   
+<!-- 工作经历-->
+<!-- 查询证书信息  -->
+<select id="getWorkList" parameterType="Map" resultType="WorkExt">
+ select CM_KEY workKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, 
+ CM_OFFICE_DATE workDate,CM_POSITION workPosition,CM_UNIT workUnit,
+ CM_ATTACHMENT workAttachment,CM_WORK workWork,CM_MODIFICATION_DATE workModiDate,
+ CM_MODIFICATION_PERSON workModiPerson from gzcrm_cmwork  where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID like '%'||#{cmId}||'%' 
+  </if>
+  <if test="workPosition!=null and workPosition!=''">
+  and CM_POSITION=#{workPosition}
+  </if>
+  <if test="workKey!=null and workKey!=''">
+  and CM_KEY=#{workKey}
+  </if>
+</select>
+
+<!-- 添加工作经历 -->
+<insert id="addWork" parameterType="Work">
+  insert into gzcrm_cmwork (CM_KEY,CM_ID,CM_OFFICE_DATE,CM_POSITION,CM_UNIT,CM_ATTACHMENT,
+  CM_WORK,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values(seq_idd.nextval,#{cmId},#{workDate},#{workPosition},#{workUnit},#{workAttachment},#{workWork},#{workModiDate},#{workModiPerson})
+</insert>
+
+<!-- 修改工作经历 -->
+<update id="modifyWork" parameterType="Work">
+   update gzcrm_cmwork set CM_OFFICE_DATE=#{workDate},CM_POSITION=#{workPosition},CM_UNIT=#{workUnit},
+   CM_ATTACHMENT=#{workAttachment},CM_WORK=#{workWork},CM_MODIFICATION_DATE=#{workModiDate},
+   CM_MODIFICATION_PERSON=#{workModiPerson} where CM_KEY=#{workKey}  
+</update>
+
+<!-- 删除工作经历 -->
+<delete id="deleteWork" parameterType="int[]">
+  delete from gzcrm_cmwork where CM_KEY in 
+   <foreach collection="array" item="workkey" open="(" close=")" separator="," index="no">
+     #{workkey}
+   </foreach>
+</delete>
+
+
+</mapper>

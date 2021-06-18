@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.RegularMeetMapper">
+
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.RegularMeet">
+      <result column="CM_KEY" property="key" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_REGULAR_DATE" property="meetDate"/>
+      <result column="CM_REGULAR_PERSONNEL" property="parties"/>
+      <result column="CM_REGULAR_THEME" property="theme"/>
+      <result column="CM_ATTACHMENT" property="attachment"/>
+      
+   </resultMap>
+   
+   <!-- 会议记录的默认查询 -->
+<select id="getRegularMeetList" parameterType="Map" resultMap="BaseResultMap">
+  select * from GZCRM_CMREGULAR where 1=1
+  <if test="key!=null and key!=''">
+  and CM_KEY=#{key}
+  </if>
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID=#{cmId}
+  </if>
+  <if test="meetDate!=null and meetDate!=''">
+  and CM_REGULAR_DATE =#{meetDate}
+  </if>
+  <if test="theme!=null and theme!=''">
+  and CM_REGULAR_THEME like "%"#{theme}"%"
+  </if>
+</select>
+
+
+<!-- 添加会员记录 -->
+<insert id="addRegularMeet" parameterType="RegularMeet">
+  insert into GZCRM_CMREGULAR (CM_ID,CM_REGULAR_DATE,CM_REGULAR_PERSONNEL,CM_REGULAR_THEME,CM_ATTACHMENT,CM_KEY) 
+values (seq_id.nextval,#{meetDate},#{parties},#{theme},#{attachment},seq_id.nextval)
+</insert>
+
+<!-- 修改会议记录 -->
+<update id="updateRegularMeet" parameterType="RegularMeet">
+   update GZCRM_CMREGULAR set  CM_REGULAR_DATE=#{meetDate},CM_REGULAR_PERSONNEL=#{parties},CM_REGULAR_THEME=#{theme},CM_ATTACHMENT=#{attachment}
+    where CM_KEY=#{key}  
+</update>
+
+<!-- 删除会议记录 -->
+<delete id="deleteRegularMeet" parameterType="int[]">
+  delete from GZCRM_CMREGULAR where CM_KEY in 
+  <foreach collection="array" item="key" open="(" close=")" separator="," index="no">
+     #{key}
+   </foreach>
+</delete>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.LTRMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.LearnTranRecord">
+      <result column="CM_KEY" property="ltrKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_TDATE" property="ltrDate"/>
+      <result column="CM_SUB" property="ltrSub"/>
+      <result column="CM_TUNIT" property="ltrUnit"/>
+      <result column="CM_STARTDATE" property="ltrStartDate"/>
+      <result column="CM_ENDDATE" property="ltrEndDate"/>
+      <result column="CM_KNOW" property="ltrKnow"/>
+      <result column="CM_CREDIT" property="ltrCredit"/>
+      <result column="CM_SCORE " property="ltrScore"/>
+      <result column="CM_ATTACHMENT" property="ltrAttachment"/>
+      <result column="CM_REMARK " property="ltrRemark"/>
+      <result column="CM_MODIFICATION_DATE" property="ltrModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="ltrModiPerson"/>
+   </resultMap>
+   
+<!-- 查询学习培训记录 -->
+<select id="getLTRList" parameterType="Map" resultType="LearnTranRecordExt">
+ select CM_KEY ltrKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, 
+ CM_TDATE ltrDate,CM_SUB ltrSub,CM_TUNIT ltrUnit,
+ CM_STARTDATE ltrStartDate,CM_ENDDATE ltrEndDate,CM_KNOW ltrKnow,CM_CREDIT ltrCredit,CM_SCORE ltrScore,
+ CM_ATTACHMENT ltrAttachment,CM_REMARK ltrRemark,CM_MODIFICATION_DATE ltrModiDate,
+ CM_MODIFICATION_PERSON ltrModiPerson from gzcrm_cmltr a  where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID like '%'||#{cmId}||'%' 
+  </if>
+  <if test="ltrDate!=null and ltrDate!=''">
+  and CM_TDATE=#{ltrDate}
+  </if>
+  <if test="ltrSub!=null and ltrSub!=''">
+  and CM_SUB=#{ltrSub}
+  </if>
+  <if test="ltrKey!=null and ltrKey!=''">
+  and CM_KEY=#{ltrKey}
+  </if>
+</select>
+
+<!-- 增加学习培训记录 -->
+<insert id="addLTR" parameterType="LearnTranRecord">
+  insert into gzcrm_cmltr (CM_KEY,CM_ID,CM_TDATE,CM_SUB,CM_TUNIT,CM_STARTDATE,CM_ENDDATE,CM_KNOW,
+  CM_CREDIT,CM_SCORE,CM_ATTACHMENT,CM_REMARK,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values (seq_id.nextval,#{cmId},#{ltrDate},#{ltrSub},#{ltrUnit},#{ltrStartDate},#{ltrEndDate},#{ltrKnow},
+#{ltrCredit},#{ltrScore},#{ltrAttachment},#{ltrRemark},#{ltrModiDate},#{ltrModiPerson})
+</insert>
+
+<!-- 修改学习培训记录 -->
+<update id="modifyLTR" parameterType="LearnTranRecord">
+   update gzcrm_cmltr set CM_TDATE=#{ltrDate},CM_SUB=#{ltrSub},CM_TUNIT=#{ltrUnit},
+   CM_STARTDATE=#{ltrStartDate},CM_ENDDATE=#{ltrEndDate},CM_KNOW=#{ltrKnow},CM_CREDIT=#{ltrCredit},
+   CM_SCORE=#{ltrScore},CM_ATTACHMENT=#{ltrAttachment},CM_REMARK=#{ltrRemark},CM_MODIFICATION_DATE=#{ltrModiDate},
+   CM_MODIFICATION_PERSON=#{ltrModiPerson} where CM_KEY=#{ltrKey}  
+</update>
+
+<!-- 删除学习培训记录 -->
+<delete id="deleteLTR" parameterType="int[]">
+  delete from gzcrm_cmltr where CM_KEY in 
+   <foreach collection="array" item="ltrKey" open="(" close=")" separator="," index="no">
+     #{ltrKey}
+   </foreach>
+</delete>
+
+</mapper>

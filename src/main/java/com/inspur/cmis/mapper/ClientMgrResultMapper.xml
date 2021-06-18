@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.ClientMgrResultMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.ClientMgrResult">
+      <result column="CM_KEY" property="cmrKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_YEAR" property="cmrYear"/>
+      <result column="CM_RESULT" property="cmrResult"/>
+      <result column="CM_ATTACHMENT" property="cmrAttachment"/>
+      <result column="CM_MODIFICATION_DATE" property="cmrModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="cmrModiPerson"/>
+   </resultMap>
+   
+<!-- 查询客户经理年度工作业绩信息 -->
+<select id="getClientMgrResultList" parameterType="Map" resultType="ClientMgrResultExt">
+ select CM_KEY cmrKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, CM_YEAR cmrYear,CM_ID cmId,
+   CM_RESULT  cmrResult,CM_ATTACHMENT cmrAttachment,CM_MODIFICATION_DATE cmrModiDate,
+   CM_MODIFICATION_PERSON cmrModiPerson from GZCRM_CMRESULTS a  where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID like '%'||#{cmId}||'%' 
+  </if>
+  <if test="cmrKey!=null and cmrKey!=''">
+  and CM_KEY=#{cmrKey}
+  </if>
+  <if test="cmrYear!=null and cmrYear!=''">
+  and CM_YEAR=#{cmrYear}
+  </if>
+</select>
+
+<!-- 增加工作年度业绩 -->
+<insert id="addClientMgrResult" parameterType="ClientMgrResult">
+  insert into GZCRM_CMRESULTS (CM_KEY,CM_ID,CM_YEAR,CM_RESULT,CM_ATTACHMENT,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values (seq_id.nextval,#{cmId},#{cmrYear},#{cmrResult},#{cmrAttachment},#{cmrModiDate},#{cmrModiPerson})
+</insert>
+
+<!-- 修改工作年度业绩 -->
+<update id="modifyCmrResult" parameterType="ClientMgrResult">
+   update GZCRM_CMRESULTS set CM_YEAR=#{cmrYear},CM_RESULT=#{cmrResult},CM_ATTACHMENT=#{cmrAttachment},CM_MODIFICATION_DATE=#{cmrModiDate},
+   CM_MODIFICATION_PERSON=#{cmrModiPerson}  where CM_KEY=#{cmrKey}  
+</update>
+
+
+<!-- 删除工作年度业绩 -->
+<delete id="deleteClientMgrResult" parameterType="int[]">
+  delete from GZCRM_CMRESULTS where CM_KEY in 
+   <foreach collection="array" item="cmrkey" open="(" close=")" separator="," index="no">
+     #{cmrkey}
+   </foreach>
+</delete>
+
+
+
+</mapper>

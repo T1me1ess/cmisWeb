@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.ClientMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.Client">
+      <result column="C_KEY" property="ckey" />
+      <result column="C_CM_ID" property="cmId"/>
+      <result column="C_SSN" property="cSsn"/>
+      <result column="C_NAME" property="cName"/>
+      <result column="C_TEL" property="cTel"/>
+      <result column="C_SALARY" property="cSalary"/>
+      <result column="C_BALANCE" property="cBalance"/>
+      <result column="C_DEBT" property="cDebt"/>
+      <result column="C_BUSINESS" property="cBusiness"/>
+      <result column="C_UNIT" property="cUnit"/>
+      <result column="C_ADD" property="cAdd"/>
+   </resultMap>
+   
+<!-- 查询客户信息 -->
+<select id="getClientList" parameterType="Map" resultType="ClientExt">
+ select C_KEY ckey,C_CM_ID cmId,(select CNAME from yc_member where MEM_ID = a.C_CM_ID ) cmName, C_SSN cSsn,
+   C_NAME  cName,C_TEL cTel,C_SALARY cSalary,C_BALANCE cBalance,C_DEBT cDebt,C_BUSINESS cBusiness,
+   C_UNIT cUnit,C_ADD cAdd from GZCRM_CINFO a  where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and C_CM_ID=#{cmId}
+  </if>
+   <if test="ckey!=null and ckey!=''">
+  and C_KEY=#{ckey}
+  </if>
+  <if test="cName!=null and cName!=''">
+  and C_NAME like '%'||#{cName}||'%'
+
+  </if>
+  <if test="cSsn!=null and cSsn!=''">
+  and C_SSN=#{cSsn}
+  </if>
+</select>
+
+<!-- 增加客户信息 -->
+<insert id="addClient" parameterType="Client">
+  insert into GZCRM_CINFO (C_CM_ID,C_SSN,C_NAME,C_TEL,C_SALARY,C_BALANCE,C_DEBT,C_BUSINESS,C_UNIT,C_ADD) 
+values (#{cmId},#{cSsn},#{cName},#{cTel},#{cSalary},#{cBalance},#{cDebt},#{cBusiness},#{cUnit},#{cAdd})
+</insert>
+
+<!-- 修改客户信息 -->
+<update id="updateClient" parameterType="Client">
+   update GZCRM_CINFO set  C_SSN=#{cSsn},C_NAME=#{cName},C_TEL=#{cTel},C_SALARY=#{cSalary},
+   C_BALANCE=#{cBalance},C_DEBT=#{cDebt},C_BUSINESS=#{cBusiness},C_UNIT=#{cUnit},C_ADD=#{cAdd}
+   where C_KEY=#{ckey}  
+</update>
+
+<!-- 删除客户信息 -->
+<delete id="deleteClient" parameterType="int[]">
+  delete from GZCRM_CINFO where C_KEY in 
+   <foreach collection="array" item="ckey" open="(" close=")" separator="," index="no">
+     #{ckey}
+   </foreach>
+</delete>
+</mapper>

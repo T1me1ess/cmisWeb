@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.CertificateMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.Certificate">
+      <result column="CM_KEY" property="cetKey" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_CERTIFICATE_NAME" property="cetName"/>
+      <result column="CM_CERTIFICATE_TYPE" property="cetType"/>
+      <result column="CM_CERTIFICATE_NO" property="cetNo"/>
+      <result column="CM_CERTIFICATE_UNIT" property="cetUnit"/>
+      <result column="CM_START_DATE" property="cetDate"/>
+      <result column="CM_END_DATE" property="cetEndDate"/>
+      <result column="CM_PERIOD" property="cetPeriod"/>
+      <result column="CM_CERTIFICATE_URL" property="cetUrl"/>
+      <result column="CM_INVALID" property="cetInvalid"/>
+      <result column="CM_REMARK" property="cetRemark"/>
+      <result column="CM_MODIFICATION_DATE" property="cetModiDate"/>
+      <result column="CM_MODIFICATION_PERSON" property="cetModiPerson"/>
+      
+   </resultMap>
+   
+
+<!-- 查询证书信息 -->
+<select id="getCertificateList" parameterType="Map" resultType="CertificateExt">
+ select CM_KEY cetKey,CM_ID cmId,(select CM_NAME from GZCRM_CMINFO where CM_ID = GZCRM_CMINFO.CM_ID ) cmName, 
+ CM_CERTIFICATE_NAME cetName,CM_CERTIFICATE_TYPE cetType,CM_CERTIFICATE_NO cetNo,
+ CM_CERTIFICATE_UNIT cetUnit,CM_START_DATE cetDate,CM_END_DATE cetEndDate,CM_PERIOD cetPeriod,CM_CERTIFICATE_URL cetUrl,
+ CM_INVALID cetInvalid,CM_REMARK cetRemark,CM_MODIFICATION_DATE cetModiDate,
+ CM_MODIFICATION_PERSON cetModiPerson from GZCRM_CERTIFICATE   where 1=1  
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID like '%'||#{cmId}||'%' 
+  </if>
+  <if test="cetKey!=null and cetKey!=''">
+  and CM_START_DATE=#{cetDate}
+  </if>
+</select>
+
+<!-- 添加证照信息 -->
+<insert id="addCertificate" parameterType="Certificate">
+  insert into GZCRM_CERTIFICATE (CM_KEY,CM_ID,CM_CERTIFICATE_NAME,CM_CERTIFICATE_TYPE,CM_CERTIFICATE_NO,CM_CERTIFICATE_UNIT,
+  CM_START_DATE,CM_END_DATE,CM_PERIOD,CM_CERTIFICATE_URL,CM_INVALID,CM_REMARK,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
+values (seq_id.nextval,#{cmId},#{cetName},#{cetType},#{cetNo},#{cetUnit},#{cetDate},#{cetEndDate},#{cetPeriod},#{cetUrl},
+#{cetInvalid},#{cetRemark},#{cetModiDate},#{cetModiPerson})
+</insert>
+
+
+<!-- 修改证照信息 -->
+<update id="modifyCertificate" parameterType="Certificate">
+   update GZCRM_CERTIFICATE set CM_CERTIFICATE_NAME=#{cetName},CM_CERTIFICATE_TYPE=#{cetType},CM_CERTIFICATE_NO=#{cetNo},
+   CM_CERTIFICATE_UNIT=#{cetUnit},CM_START_DATE=#{cetDate},CM_END_DATE=#{cetEndDate},CM_PERIOD=#{cetPeriod},
+   CM_CERTIFICATE_URL=#{cetUrl},CM_INVALID=#{cetInvalid},CM_REMARK=#{cetRemark},CM_MODIFICATION_DATE=#{cetModiDate},
+   CM_MODIFICATION_PERSON=#{cetModiPerson} where CM_KEY=#{cetKey}  
+</update>
+
+<!-- 删除证照信息 -->
+<delete id="deleteCertificate" parameterType="int[]">
+  delete from GZCRM_CERTIFICATE where CM_KEY in 
+   <foreach collection="array" item="cetkey" open="(" close=")" separator="," index="no">
+     #{cetkey}
+   </foreach>
+</delete>
+
+
+
+
+</mapper>

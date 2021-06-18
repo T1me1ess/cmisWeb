@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.CMWorkMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.CMWork">
+      <result column="CM_KEY" property="key" />
+      <result column="CM_ID" property="cmId"/>
+      <result column="CM_MANAGEMENT" property="cmManagement"/>
+      <result column="CM_PRODUCT" property="cmProduct"/>
+      <result column="CM_LOAN" property="cmLoan"/>
+      <result column="CM_WARNING" property="cmWarning"/>
+      <result column="CM_ISSUE" property="cmIssue"/>
+      <result column="CM_WORK_PROPOSAL" property="cmWorkProposal"/>
+      <result column="CM_DATE" property="cmDate"/>   
+   </resultMap>
+   
+   <!-- 客户经理工作的默认查询 -->
+<select id="getCMWorkList" parameterType="Map" resultMap="BaseResultMap">
+  select * from gzcrm_cminfo_work where 1=1
+  <if test="key!=null and key!=''">
+  and CM_KEY=#{key}
+  </if>
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID=#{cmId}
+  </if>
+  <if test="cmDate!=null and cmDate!=''">
+  and CM_DATE like  '%'||#{cmDate}||'%'
+  </if>
+</select>
+
+<!-- 添加工作记录 -->
+<insert id="addCMWork" parameterType="CMWork">
+  insert into gzcrm_cminfo_work (CM_KEY,CM_ID,CM_MANAGEMENT,CM_PRODUCT,CM_LOAN,CM_WARNING,CM_ISSUE,CM_WORK_PROPOSAL,CM_DATE) 
+values (seq_id.nextval,#{cmId},#{cmManagement},#{cmProduct},#{cmLoan},#{cmWarning},#{cmIssue},#{cmWorkProposal},#{cmDate})
+</insert>
+
+<!-- 修改工作记录 -->
+<update id="updateCMWork" parameterType="CMWork">
+   update gzcrm_cminfo_work set  CM_MANAGEMENT=#{cmManagement},CM_PRODUCT=#{cmProduct},CM_LOAN=#{cmLoan},CM_WARNING=#{cmWarning} ,CM_ISSUE=#{cmIssue},CM_WORK_PROPOSAL=#{cmWorkProposal}
+   where CM_KEY=#{key}  
+</update>
+
+<!-- 删除工作记录 -->
+<delete id="deleteCMWork" parameterType="int[]">
+  delete from gzcrm_cminfo_work where CM_KEY in 
+   <foreach collection="array" item="keys" open="(" close=")" separator="," index="no">
+     #{keys}
+   </foreach>
+</delete>
+
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.inspur.cmis.mapper.ClientMgrMapper">
+   <resultMap id="BaseResultMap" type="com.inspur.cmis.pojo.ClientManager">
+    <result column="CM_ID" property="cmId" />
+    <result column="CM_NAME" property="cmName"  />
+    <result column="CM_SEX" property="cmSex"  />
+    <result column="CM_SSN" property="cmSsn"  />
+    <result column="CM_BIRTHDAY" property="cmBirthDay"  />
+    <result column="CM_AGE" property="cmAge"  />
+    <result column="CM_NATION" property="cmNation"  />
+    <result column="CM_POLITICAL_LANDSCAPE" property="cmPoli"  />
+    <result column="CM_HOMETOWN" property="cmHome"  />
+    <result column="CM_PHOTO" property="cmPhoto"  />
+    <result column="CM_EDUCATION" property="cmEducation"  />
+    <result column="CM_DEGREE" property="cmDegree" /> 
+    <result column="CM_STATUS" property="cmStatus" />
+    <result column="CM_GRADUATED" property="cmGraduated"  />
+    <result column="CM_PROFESSIONAL_TITLES" property="cmProTitles"  />
+    <result column="CM_HIREDATE" property="cmHireDate"  />
+    <result column="CM_ENTRY_TIME" property="cmEntryDate"  />
+    <result column="CM_FINANCIAL_YEARS" property="cmFiYear"  />
+    <result column="CM_WORKING_YEARS" property="cmWorkYear"  />
+    <result column="CM_LEVEL" property="cmLevel" /> 
+    <result column="CM_UNIT" property="cmUnit"  />
+    <result column="CM_DEPT" property="cmDept"  />
+    <result column="CM_POSITION" property="cmPosition"  />
+    <result column="CM_TEL" property="cmTel"  />
+    <result column="CM_MOBILE" property="cmMobile"  />
+    <result column="CM_BUSINESS_LINES" property="cmBusLines"  />
+    <result column="CM_MODIFICATION_DATE" property="cmModiDate"  />
+    <result column="CM_MODIFICATION_PERSON" property="cmModiPerson"  />
+  </resultMap>
+ 
+  
+   
+   <!-- 客户经理管理的默认查询 -->
+<select id="getClientManagerList" parameterType="Map" resultMap="BaseResultMap">
+  select * from GZCRM_CMINFO where 1=1
+  <if test="cmUnit!=null and cmUnit!=''">
+  and CM_UNIT=#{cmUnit}
+  </if>
+  <if test="cmId!=null and cmId!=''">
+  and CM_ID=#{cmId}
+  </if>
+  <if test="cmName!=null and cmName!=''">
+  and CM_NAME =#{cmName}
+  </if>
+  <if test="cmStatus!=null and cmStatus!='' ">
+  and CM_STATUS =#{cmStatus}
+  </if>
+  <if test="cmSex!=null and cmSex!=''">
+  and CM_SEX =#{cmSex}
+  </if>
+  <if test="cmEducation!=null and cmEducation!=''">
+  and CM_EDUCATION =#{cmEducation}
+  </if>
+  <if test="cmProTitles!=null and cmProTitles!=''">
+  and CM_PROFESSIONAL_TITLES =#{cmProTitles}
+  </if>
+  <if test="cmLevel!=null and cmLevel!=''">
+  and CM_LEVEL =#{cmLevel}
+  </if>
+</select>
+
+
+<!-- 客户信息的增加 -->
+ <insert id="addClientMgr" parameterType="ClientManager">
+    insert into GZCRM_CMINFO (CM_ID,CM_NAME,CM_SEX,CM_SSN,CM_BIRTHDAY,CM_AGE,CM_NATION,CM_POLITICAL_LANDSCAPE,CM_HOMETOWN,CM_PHOTO,
+    CM_EDUCATION,CM_DEGREE,CM_GRADUATED,CM_PROFESSIONAL_TITLES,CM_HIREDATE,CM_ENTRY_TIME,CM_FINANCIAL_YEARS,CM_WORKING_YEARS,CM_LEVEL,
+    CM_UNIT,CM_DEPT,CM_POSITION,CM_TEL,CM_MOBILE,CM_BUSINESS_LINES,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON,CM_STATUS)
+    values (#{cmId},#{cmName},#{cmSex},#{cmSsn},#{cmBirthDay},#{cmAge},#{cmNation},#{cmPoli}, #{cmHome},#{cmPhoto},
+    #{cmEducation},#{cmDegree},#{cmGraduated},#{cmProTitles},#{cmHireDate},#{cmEntryDate},#{cmFiYear},#{cmWorkYear},
+    #{cmLevel},#{cmUnit},#{cmDept},#{cmPosition},#{cmTel},#{cmMobile},#{cmBusLines},#{cmModiDate},#{cmModiPerson},#{cmStatus})
+  </insert>
+
+<!-- 客户信息的修改 -->
+
+<update id="updateClientMgr" parameterType="ClientManager">
+   update GZCRM_CMINFO set  CM_NAME=#{cmName},CM_SEX=#{cmSex},CM_SSN=#{cmSsn},CM_BIRTHDAY=#{cmBirthDay},CM_AGE=#{cmAge},
+   CM_NATION=#{cmNation},CM_POLITICAL_LANDSCAPE=#{cmPoli},CM_HOMETOWN=#{cmHome},CM_PHOTO=#{cmPhoto},CM_EDUCATION=#{cmEducation},
+   CM_DEGREE=#{cmDegree}, CM_GRADUATED=#{cmGraduated},CM_PROFESSIONAL_TITLES=#{cmProTitles},CM_HIREDATE=#{cmHireDate},
+   CM_ENTRY_TIME=#{cmEntryDate},CM_FINANCIAL_YEARS=#{cmFiYear},CM_WORKING_YEARS=#{cmWorkYear},CM_LEVEL=#{cmLevel},
+   CM_UNIT=#{cmUnit},CM_DEPT=#{cmDept},CM_POSITION=#{cmPosition},
+   CM_TEL=#{cmTel},CM_MOBILE=#{cmMobile},CM_BUSINESS_LINES=#{cmBusLines},CM_MODIFICATION_DATE=#{cmModiDate},
+   CM_MODIFICATION_PERSON=#{cmModiPerson},CM_STATUS=#{cmStatus}
+    where CM_ID=#{cmId}  
+</update>
+
+<!-- 客户信息的删除 -->
+<delete id="deleteClientMgr" parameterType="int[]">
+  delete from GZCRM_CMINFO where CM_ID in 
+   <foreach collection="array" item="ids" open="(" close=")" separator="," index="no">
+     #{ids}
+   </foreach>
+</delete>
+
+ <!-- 客户经理批量保存-->
+  <insert id="importClientMgrList" parameterType="java.util.List">
+    insert into GZCRM_CMINFO (CM_ID,CM_NAME,CM_SEX,CM_SSN,CM_BIRTHDAY,CM_AGE,CM_NATION,CM_POLITICAL_LANDSCAPE,CM_HOMETOWN,
+    CM_EDUCATION,CM_DEGREE,CM_GRADUATED,CM_PROFESSIONAL_TITLES,CM_HIREDATE,CM_ENTRY_TIME,CM_FINANCIAL_YEARS,CM_WORKING_YEARS,
+    CM_TEL,CM_MOBILE,CM_UNIT,CM_DEPT,CM_LEVEL) 
+     <foreach collection="list" item="clientMgr"  separator="union all">
+      (select seq_id.nextval, #{clientMgr.cmName},#{clientMgr.cmSex},#{clientMgr.cmSsn},#{clientMgr.cmBirthDay},
+       #{clientMgr.cmAge},#{clientMgr.cmNation},#{clientMgr.cmPoli}, #{clientMgr.cmHome},#{clientMgr.cmEducation},
+       #{clientMgr.cmDegree},#{clientMgr.cmGraduated},#{clientMgr.cmProTitles},#{clientMgr.cmHireDate},
+       #{clientMgr.cmEntryDate},#{clientMgr.cmFiYear},#{clientMgr.cmWorkYear},
+       #{clientMgr.cmTel},#{clientMgr.cmMobile},#{clientMgr.cmUnit},#{clientMgr.cmDept},#{clientMgr.cmLevel} from dual)
+    </foreach>
+  </insert>
+
+</mapper>
