@@ -1,0 +1,21 @@
+cl_showpos 1;
+
+sv_cheats 1;
+
+sv_airaccelerate 1000;
+sv_enablebunnyhopping 1; 
+sv_autobunnyhopping 1;
+
+bind "f2" "con_logfile cfg/tppos.log; getpos_exact; con_logfile 0";
+
+bind "f3" "exec tppos.log; noclip";
+
+sv_gravity 800;
+
+
+sv_staminajumpcost 0;
+sv_staminalandcost 0;
+sv_staminamax 0;
+sv_staminarecoveryrate 0;
+sv_ladder_scale_speed 1;
+sv_clamp_unsafe_velocities; 
