@@ -40,7 +40,6 @@
 
 
 <!-- 增加的用户 -->
-  
 <insert id="addUser" parameterType="User">
   insert into yc_member (MEM_ID,CNAME,MEM_PASS,MEM_SEX,MEM_BORN,MEM_MAIL,MEM_QUESTION,MEM_ANSWER,REGISTER_TIME,LAST_TIME,ISENABLE,ROLEID) 
 values (seq_id.nextval,#{username},#{password},#{sex},#{birthDay},#{email},#{question},#{answer},#{registerTime},#{lastTime},#{isEnable},#{roleId})

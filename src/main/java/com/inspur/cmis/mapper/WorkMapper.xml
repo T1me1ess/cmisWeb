@@ -36,7 +36,7 @@
 <insert id="addWork" parameterType="Work">
   insert into gzcrm_cmwork (CM_KEY,CM_ID,CM_OFFICE_DATE,CM_POSITION,CM_UNIT,CM_ATTACHMENT,
   CM_WORK,CM_MODIFICATION_DATE,CM_MODIFICATION_PERSON) 
-values(seq_idd.nextval,#{cmId},#{workDate},#{workPosition},#{workUnit},#{workAttachment},#{workWork},#{workModiDate},#{workModiPerson})
+values(seq_id.nextval,#{cmId},#{workDate},#{workPosition},#{workUnit},#{workAttachment},#{workWork},#{workModiDate},#{workModiPerson})
 </insert>
 
 <!-- 修改工作经历 -->

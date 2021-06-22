@@ -601,8 +601,8 @@ $(document).ready(function(e) {
 	        <th>任职日期</th>
 	        <th>职务</th>
 	        <th>单位</th>
-	        <th>工作经历</th>
 	        <th>附件依据</th>
+	        <th>工作经历</th>	        
 	        <th>维护日期</th>
 	        <th>维护人</th>
 	        </tr>
